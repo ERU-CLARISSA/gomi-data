@@ -1,0 +1,24 @@
+{
+  "schema": "gomi-categories/1",
+  "_note": "ごみの種類の語彙。icon は Material Symbols の名前。色だけで区別しないよう、必ず icon も表示する。",
+  "categories": {
+    "burnable":     {"label": "燃えるごみ",   "short": "燃える", "color": "#E4572E", "icon": "local_fire_department"},
+    "kitchen":      {"label": "生ごみ",       "short": "生",     "color": "#F29E4C", "icon": "compost"},
+    "non_burnable": {"label": "燃えないごみ", "short": "燃えない", "color": "#7D8491", "icon": "delete"},
+    "plastic":      {"label": "プラスチック", "short": "プラ",   "color": "#2F80ED", "icon": "shopping_bag"},
+    "pet_bottle":   {"label": "ペットボトル", "short": "ペット", "color": "#27AE60", "icon": "water_bottle"},
+    "beverage_can": {"label": "缶",           "short": "缶",     "color": "#56A3A6", "icon": "local_drink"},
+    "glass_bottle": {"label": "びん",         "short": "びん",   "color": "#8C9A3B", "icon": "wine_bar"},
+    "paper":        {"label": "古紙",         "short": "古紙",   "color": "#B7882C", "icon": "newspaper"},
+    "cloth":        {"label": "古布",         "short": "古布",   "color": "#B5651D", "icon": "checkroom"},
+    "paper_cloth":  {"label": "古紙・古布",   "short": "紙布",   "color": "#9B6CC0", "icon": "inventory_2"},
+    "recyclables":  {"label": "資源",         "short": "資源",   "color": "#1F9E89", "icon": "recycling"},
+    "metal":        {"label": "金属ごみ",     "short": "金属",   "color": "#5C7C8A", "icon": "hardware"},
+    "hazardous":    {"label": "有害ごみ",     "short": "有害",   "color": "#8E3B5E", "icon": "warning"},
+    "battery":      {"label": "乾電池",       "short": "電池",   "color": "#C0392B", "icon": "battery_alert"},
+    "spray_can":    {"label": "スプレー缶",   "short": "スプレー", "color": "#D98A4F", "icon": "sanitizer"},
+    "yard_waste":   {"label": "剪定枝・草",   "short": "枝葉",   "color": "#4E8B3A", "icon": "yard"},
+    "oversized":    {"label": "粗大ごみ",     "short": "粗大",   "color": "#8B6F47", "icon": "chair"},
+    "other":        {"label": "その他",       "short": "他",     "color": "#95A5A6", "icon": "category"}
+  }
+}

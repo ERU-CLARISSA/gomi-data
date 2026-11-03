@@ -1,0 +1,8 @@
+{
+  "_note": "取り込み元。上にあるものほど優先（同じ市区町村コードが複数の元にあれば、上のものを使う）。自治体の一次データを先に置く。enabled=false で外せる。競合アプリ・民間サービスのデータは入れない。",
+  "sources": [
+    {"id": "nagano-city", "module": "nagano_city", "enabled": true},
+    {"id": "bunkyo-city", "module": "bunkyo_city", "enabled": true},
+    {"id": "japan-gomi-data", "module": "japan_gomi_data", "enabled": true}
+  ]
+}
