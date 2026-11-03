@@ -4,15 +4,42 @@ import io
 import re
 import unicodedata
 from datetime import date, datetime, timedelta
+from pathlib import Path
 
 from ..jpexpr import category_key
 from ..util import http_get
 
 
-def read_rows(url, fmt=None, sheet=0):
-    """表を行のリスト（文字列のリスト）で返す。CSV は UTF-8 か Shift_JIS、Excel は xlsx・xls。"""
-    data = http_get(url).content
-    fmt = (fmt or url.rsplit(".", 1)[-1]).lower()
+CACHE = Path(__file__).resolve().parents[2] / "cache"
+
+
+def fetch(urls, cache_name=None):
+    """urls を順に試して中身を返す。取れたら cache/ に写しを保存する。
+    どこからも取れなければ cache/ の写しを使う（石川県のカタログは GitHub Actions からの取得を 403 で断るため）。
+    写しは CC BY などのオープンデータの再配布で、出典は地域ファイルの sources に書いてある。"""
+    urls = [urls] if isinstance(urls, str) else urls
+    errors = []
+    for u in urls:
+        try:
+            data = http_get(u).content
+            if cache_name:
+                CACHE.mkdir(exist_ok=True)
+                if not (CACHE / cache_name).exists() or (CACHE / cache_name).read_bytes() != data:
+                    (CACHE / cache_name).write_bytes(data)
+            return data
+        except Exception as e:  # 次の取得先・写しを試す
+            errors.append(f"{u}: {type(e).__name__}")
+    if cache_name and (CACHE / cache_name).exists():
+        print(f"  [写しを使う] {cache_name}（{'; '.join(errors)}）")
+        return (CACHE / cache_name).read_bytes()
+    raise RuntimeError("取得できない: " + "; ".join(errors))
+
+
+def read_rows(url, fmt=None, sheet=0, cache_name=None):
+    """表を行のリスト（文字列のリスト）で返す。CSV は UTF-8 か Shift_JIS、Excel は xlsx・xls。url はリストでもよい。"""
+    data = fetch(url, cache_name)
+    first = url if isinstance(url, str) else url[0]
+    fmt = (fmt or first.rsplit(".", 1)[-1]).lower()
     if fmt == "xlsx":
         import openpyxl
         ws = openpyxl.load_workbook(io.BytesIO(data), read_only=True, data_only=True).worksheets[sheet]

@@ -15,6 +15,8 @@ from . import tables as T
 
 BODIK = "https://data.bodik.jp/dataset"
 ISHIKAWA = "https://ckan.opendata.pref.ishikawa.lg.jp/dataset"
+# 金沢市のオープンデータポータル（石川県のカタログと同じファイルがある）。石川県のカタログは GitHub Actions から 403 になる
+KANAZAWA_PORTAL = "https://catalog-data.city.kanazawa.ishikawa.jp/dataset"
 
 
 def _source(name, url, license_, org, files):
@@ -44,7 +46,8 @@ def _weekday_entries(rows, header_row, town_cols, cat_cols, cats, fy, extra=None
 # ---------- 金沢市（5374 の形＋月の範囲。人が読む用の列と突き合わせる） ----------
 def kanazawa(cfg, today):
     fy, url = 2026, f"{ISHIKAWA}/ef2503b5-957a-4ea0-ad55-c20c48f93d3e/resource/f7eb38ee-8af5-47a9-a466-62ac9434cd7e/download/2026.csv"
-    rows = T.read_rows(url, "csv")
+    alt = f"{KANAZAWA_PORTAL}/88ff02df-c3b1-439d-82d5-bb9c46bfdd92/resource/0c07d8e8-ee46-480f-b8dc-3ab772a2bb99/download/schedule2026.csv"
+    rows = T.read_rows([url, alt], "csv", cache_name="kanazawa_2026.csv")
     head = rows[0]
     # 「資源回収（29〜31 日は容プラのみ）」は資源（名前の「プラ」でプラスチックにしない）
     cats = T.Categories({T.clean(head[5]).replace(" ", ""): "recyclables"})
@@ -89,7 +92,8 @@ def _days_of(rules):
 def tsubata(cfg, today):
     fy = 2026
     url = f"{ISHIKAWA}/5f7215f4-9996-4a9d-af2f-e55f9e08477f/resource/c9b84607-8b56-4df9-9eea-30cd983aca8e/download/173614_recycle_calendar.csv"
-    rows = T.read_rows(url, "csv")
+    alt = f"{KANAZAWA_PORTAL}/3730b997-b2ae-438b-80d6-22962091510c/resource/0547c745-9631-4a45-a8d5-c5a59a6921a5/download/173614_recycle_calendar.csv"
+    rows = T.read_rows([url, alt], "csv", cache_name="tsubata_2026.csv")
     cats = T.Categories()
 
     def extra(row, sched):
@@ -106,7 +110,7 @@ def tsubata(cfg, today):
 def saga(cfg, today):
     fy = 2026
     url = f"{BODIK}/f4e0b6e8-c70e-481d-a5f1-7df3b6ae569d/resource/3ce9911c-7ee9-409f-abea-9ee46572d668/download/r8_.csv"
-    rows = T.read_rows(url, "csv")
+    rows = T.read_rows(url, "csv", cache_name="saga_r8.csv")
     cats = T.Categories()
     entries = _weekday_entries(rows, 0, [1], [3, 4, 5, 6], cats, fy)
     for e, row in zip(entries, [r for r in rows[1:] if any(r) and r[1].strip()]):
@@ -126,7 +130,7 @@ OGORI_FIXES = {"202606219": "20260619"}  # 元データの打ち間違い（同�
 def ogori(cfg, today):
     fy = 2026
     url = f"{BODIK}/bcbf22fa-64ee-401d-9a2f-5d925c47f7ed/resource/f8ca70bc-650c-4bf1-bcb2-51675bc0ff29/download/10014_gomishu2bi_2026.csv"
-    rows = T.read_rows(url, "csv")
+    rows = T.read_rows(url, "csv", cache_name="ogori_2026.csv")
     for row in rows:
         for i, v in enumerate(row):
             for bad, good in OGORI_FIXES.items():
@@ -172,12 +176,12 @@ def ikoma(cfg, today):
     base = f"{BODIK}/640d9544-d11a-4935-b2ad-55ade7014420/resource"
     url = f"{base}/92f6f117-09df-4b2e-88f2-e92ea68664d0/download/r8arealist.xls"
     hol_url = f"{base}/17444b3c-5fef-4d54-9203-e7e695e8d375/download/r8collectlist.xls"
-    rows = T.read_rows(url, "xls")
+    rows = T.read_rows(url, "xls", cache_name="ikoma_r8.xls")
     head = rows[0]
     cats = T.Categories({T.clean(head[4]).replace(" ", ""): "recyclables"})
     keys = [cats.key(head[c]) for c in (2, 3, 4)]
     holidays = []
-    for r in T.read_rows(hol_url, "xls"):
+    for r in T.read_rows(hol_url, "xls", cache_name="ikoma_r8_holidays.xls"):
         m = re.match(r"令和(\d+)年(\d+)月(\d+)日", T.clean(r[0]))
         if m:
             d = date(2018 + int(m.group(1)), int(m.group(2)), int(m.group(3)))
@@ -220,7 +224,7 @@ def _ikoma_cats(text, keys):
 # ---------- 大分市（カレンダー番号ごとの日付の一覧。地区との対応表は公開データにない） ----------
 def oita(cfg, today):
     url = f"{BODIK}/1365d0e4-d7aa-4a3c-85a5-172d1cdd910c/resource/85ca6d28-5a4f-4729-b1cd-2c920f4668e3/download/2026schedule.csv"
-    rows = T.read_rows(url, "csv")
+    rows = T.read_rows(url, "csv", cache_name="oita_2026.csv")
     cats = T.Categories()
     by_cal = defaultdict(lambda: defaultdict(list))
     for r in rows[1:]:
@@ -243,7 +247,7 @@ def oita(cfg, today):
 # ---------- 三郷町（日付×地区の表。1 つのマスに「可燃ごみ・ガス缶スプレー缶」のように 2 種類） ----------
 def misato(cfg, today):
     url = f"{BODIK}/35c5dbff-5ffd-4796-a74f-1172c824640b/resource/fe1a7675-1750-4cb8-8c90-410be530b227/download/293431_garbage_calendar.xlsx"
-    rows = T.read_rows(url, "xlsx")
+    rows = T.read_rows(url, "xlsx", cache_name="misato_2026.xlsx")
     head = rows[0]
     cols = [(c, T.clean(head[c])) for c in range(2, len(head)) if T.clean(head[c])]
     cats = T.Categories()
