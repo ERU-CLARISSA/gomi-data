@@ -148,8 +148,9 @@ def validate_region(region, report, today, vocab):
     if not url:
         warn("公式サイト（official_url）がない")
     cats = region.get("categories", {})
-    for c in cats:
-        if c not in vocab:
+    for c, info in cats.items():
+        base = (info or {}).get("base", c)
+        if base not in vocab:
             warn(f"語彙にない種類「{c}」（アプリでは「その他」として表示）")
     if not region.get("areas"):
         return err("地区（areas）が 1 つもない")

@@ -1,8 +1,62 @@
 {
   "_note": "取り込み元。上にあるものほど優先（同じ市区町村コードが複数の元にあれば、上のものを使う）。自治体の一次データを先に置く。enabled=false で外せる。競合アプリ・民間サービスのデータは入れない。",
   "sources": [
-    {"id": "nagano-city", "module": "nagano_city", "enabled": true},
-    {"id": "bunkyo-city", "module": "bunkyo_city", "enabled": true},
-    {"id": "japan-gomi-data", "module": "japan_gomi_data", "enabled": true}
+    {
+      "id": "nagano-city",
+      "module": "nagano_city",
+      "enabled": true
+    },
+    {
+      "id": "bunkyo-city",
+      "module": "bunkyo_city",
+      "enabled": true
+    },
+    {
+      "id": "kanazawa",
+      "module": "cities",
+      "city": "kanazawa",
+      "enabled": true
+    },
+    {
+      "id": "tsubata",
+      "module": "cities",
+      "city": "tsubata",
+      "enabled": true
+    },
+    {
+      "id": "saga",
+      "module": "cities",
+      "city": "saga",
+      "enabled": true
+    },
+    {
+      "id": "ogori",
+      "module": "cities",
+      "city": "ogori",
+      "enabled": true
+    },
+    {
+      "id": "ikoma",
+      "module": "cities",
+      "city": "ikoma",
+      "enabled": true
+    },
+    {
+      "id": "oita",
+      "module": "cities",
+      "city": "oita",
+      "enabled": true
+    },
+    {
+      "id": "misato",
+      "module": "cities",
+      "city": "misato",
+      "enabled": true
+    },
+    {
+      "id": "japan-gomi-data",
+      "module": "japan_gomi_data",
+      "enabled": true
+    }
   ]
 }

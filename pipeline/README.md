@@ -12,6 +12,8 @@
 | `gomi/sources/japan_gomi_data.py` | tecolicom/japan-gomi-data（CC BY 4.0、YAML）。全日で元データの意味と一致するか自己照合する |
 | `gomi/sources/nagano_city.py` | 長野市 ごみ収集カレンダー（CC BY 4.0、日付入り CSV の zip） |
 | `gomi/sources/bunkyo_city.py` | 文京区 ごみと資源の収集日（CC BY、曜日の CSV） |
+| `gomi/sources/cities.py` | 自治体のオープンデータ（2026-11 追加：金沢市・津幡町・佐賀市・小郡市・生駒市・大分市・三郷町）。共通部分は `tables.py` |
+| `gomi/jpexpr.py` | 表に書いてある収集日の書き方（「火1 火3」「第1・3火」「水2:4-3」「金3（1 金4）」など）→ 規則 |
 | `gomi/validate.py` | チェック（形・日付の矛盾・欠け）。エラーの地域は配信しない |
 | `gomi/ics.py` | .ics への変換（RRULE／EXDATE／RDATE） |
 | `build.py` | 取得 → 変換 → チェック → `site/`（index.json・地域ファイル・report.md・index.html） |
