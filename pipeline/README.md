@@ -19,7 +19,7 @@
 
 ## 手元で動かす
 ```
-cd C:\D\dev2\gomi_app\pipeline
+cd C:\D\dev2\gomi_data\pipeline
 ..\.venv\Scripts\python -m pip install -r requirements.txt
 ..\.venv\Scripts\python -X utf8 -m unittest discover -s tests -t .
 ..\.venv\Scripts\python -X utf8 build.py --out ..\site
