@@ -13,6 +13,8 @@ from ..util import http_get, last_modified
 
 CSV_URL = "https://www.city.bunkyo.lg.jp/documents/6059/syusyubi.csv"
 CATALOG_URL = "https://catalog.data.metro.tokyo.lg.jp/dataset/t131059d0110060001"
+# 利用者向けの案内（区の「ごみ・リサイクル」）。アプリに「公式サイト（参考）」として出す
+OFFICIAL_URL = "https://www.city.bunkyo.lg.jp/tetsuzuki/gomi/index.html"
 JP_DAYS = {"月": "MO", "火": "TU", "水": "WE", "木": "TH", "金": "FR", "土": "SA", "日": "SU"}
 
 
@@ -71,7 +73,7 @@ def convert(cfg, today):
         })
     return [{
         "schema": "gomi-schedule/1",
-        "id": "13105", "pref": "東京都", "name": "文京区",
+        "id": "13105", "pref": "東京都", "name": "文京区", "official_url": OFFICIAL_URL,
         "data_updated": updated,
         "sources": [{"name": "文京区 ごみと資源の収集日（東京都オープンデータカタログ）", "url": CATALOG_URL,
                      "license": "CC BY 4.0", "attribution": "文京区",

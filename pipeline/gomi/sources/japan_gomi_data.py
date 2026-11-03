@@ -155,6 +155,8 @@ def convert_tree(files, today):
         regions.append({
             "schema": "gomi-schedule/1",
             "id": str(meta["code"]), "pref": meta.get("region_ja", ""), "name": meta["name_ja"],
+            # 自治体のごみの案内ページ（元データの meta.yaml の index_url）。アプリに「公式サイト（参考）」として出す
+            "official_url": (meta.get("source") or {}).get("index_url"),
             "data_updated": max(_iso(x["metadata"]["source"]["extracted_at"]) for x in courses),
             "sources": [{"name": "japan-gomi-data（tecolicom）", "url": f"{REPO_URL}/tree/main/municipalities",
                          "license": "CC BY 4.0", "attribution": "tecolicom/japan-gomi-data",

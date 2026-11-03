@@ -14,6 +14,8 @@ from ..infer import infer_schedule
 from ..util import http_get
 
 PAGE_URL = "https://www.city.nagano.nagano.jp/n023500/contents/p006280.html"
+# 利用者向けの案内（ごみカレンダーの配布）。アプリに「公式サイト（参考）」として出す
+OFFICIAL_URL = "https://www.city.nagano.nagano.jp/site/kateigomi/139095.html"
 BASE = "https://www.city.nagano.nagano.jp"
 
 # 元データの種類名 → 共通の種類キー
@@ -97,7 +99,7 @@ def convert(cfg, today):
             area["schedules"].append(infer_schedule(cats, start, end))
     return [{
         "schema": "gomi-schedule/1",
-        "id": "20201", "pref": "長野県", "name": "長野市",
+        "id": "20201", "pref": "長野県", "name": "長野市", "official_url": OFFICIAL_URL,
         "data_updated": updated,
         "sources": [{"name": "長野市 ごみ収集カレンダー（オープンデータ）", "url": PAGE_URL,
                      "license": "CC BY 4.0", "attribution": "長野市",

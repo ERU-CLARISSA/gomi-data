@@ -142,6 +142,11 @@ def validate_region(region, report, today, vocab):
         err(f"schema が違う: {region.get('schema')}")
     if not region.get("sources") or any(not s.get("license") or not s.get("url") for s in region["sources"]):
         err("出典（sources の url・license）がない")
+    url = region.get("official_url")
+    if url is not None and not str(url).startswith(("https://", "http://")):
+        err(f"official_url が URL でない: {url}")
+    if not url:
+        warn("公式サイト（official_url）がない")
     cats = region.get("categories", {})
     for c in cats:
         if c not in vocab:
